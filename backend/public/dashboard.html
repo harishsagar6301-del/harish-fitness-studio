@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>HARISH FITNESS Dashboard</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#050505;
+color:white;
+}
+
+.navbar{
+background:#111;
+padding:20px 40px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+position:sticky;
+top:0;
+z-index:100;
+}
+
+.logo{
+font-size:32px;
+font-weight:bold;
+color:red;
+}
+
+.logout-btn{
+background:red;
+color:white;
+border:none;
+padding:12px 25px;
+border-radius:30px;
+cursor:pointer;
+font-weight:bold;
+}
+
+.hero{
+text-align:center;
+padding:60px 20px;
+}
+
+.hero h1{
+font-size:42px;
+color:red;
+margin-bottom:10px;
+}
+
+.hero p{
+color:#ccc;
+font-size:18px;
+}
+
+.cards{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+gap:25px;
+padding:40px;
+}
+
+.card{
+background:#111;
+padding:25px;
+border-radius:20px;
+transition:0.3s;
+}
+
+.card:hover{
+transform:translateY(-8px);
+box-shadow:0 0 20px rgba(255,0,0,0.3);
+}
+
+.card h2{
+color:red;
+margin-bottom:15px;
+}
+
+.card p{
+color:#ddd;
+line-height:1.8;
+}
+
+.status{
+color:#00ff88;
+font-weight:bold;
+}
+
+.btn{
+width:100%;
+padding:12px;
+margin-top:15px;
+border:none;
+border-radius:30px;
+background:red;
+color:white;
+cursor:pointer;
+font-weight:bold;
+}
+
+.footer{
+text-align:center;
+padding:30px;
+color:#777;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="navbar">
+
+<div class="logo">
+HARISH FITNESS
+</div>
+
+<button
+class="logout-btn"
+onclick="logout()">
+Logout
+</button>
+
+</div>
+
+<div class="hero">
+
+<h1>
+Welcome,
+<span id="username">Member</span>
+</h1>
+
+<p>
+Your Premium Fitness Dashboard
+</p>
+
+</div>
+
+<div class="cards">
+
+<!-- PROFILE -->
+
+<div class="card">
+
+<h2>My Profile</h2>
+
+<p>
+View your profile and account details.
+</p>
+
+<button
+class="btn"
+onclick="window.location.href='profile.html'">
+Open Profile
+</button>
+
+</div>
+
+<!-- MEMBERSHIP -->
+
+<div class="card">
+
+<h2>Membership Plan</h2>
+
+<p
+class="status"
+id="plan">
+No Active Plan
+</p>
+
+<button
+class="btn"
+onclick="window.location.href='membership.html'">
+Manage Membership
+</button>
+
+</div>
+
+<!-- PAYMENT -->
+
+<div class="card">
+
+<h2>Payment Status</h2>
+
+<p
+class="status"
+id="paymentStatus">
+Pending
+</p>
+
+</div>
+
+<!-- EXPIRY -->
+
+<div class="card">
+
+<h2>Membership Expiry</h2>
+
+<p
+class="status"
+id="expiryDate">
+Not Available
+</p>
+
+<p
+id="daysRemaining">
+0 Days Remaining
+</p>
+
+</div>
+
+<!-- WORKOUT -->
+
+<div class="card">
+
+<h2>Workout Tracker</h2>
+
+<p>
+Track your daily workouts.
+</p>
+
+<button
+class="btn"
+onclick="window.location.href='workout.html'">
+Start Workout
+</button>
+
+</div>
+
+<!-- DIET -->
+
+<div class="card">
+
+<h2>Diet Plan</h2>
+
+<p id="diet">
+No Diet Selected
+</p>
+
+<button
+class="btn"
+onclick="window.location.href='diet.html'">
+View Diet Plan
+</button>
+
+</div>
+
+<!-- TRAINER -->
+
+<div class="card">
+
+<h2>Trainer Booking</h2>
+
+<p
+class="status"
+id="trainerName">
+No Trainer Selected
+</p>
+
+<button
+class="btn"
+onclick="window.location.href='trainer.html'">
+Book Trainer
+</button>
+
+</div>
+
+<!-- ATTENDANCE -->
+
+<div class="card">
+
+<h2>Attendance Tracker</h2>
+
+<p>
+Track gym attendance.
+</p>
+
+<button
+class="btn"
+onclick="window.location.href='attendance.html'">
+Open Attendance
+</button>
+
+</div>
+
+<!-- PROGRESS -->
+
+<div class="card">
+
+<h2>Progress Tracker</h2>
+
+<p>
+Track BMI and body progress.
+</p>
+
+<button
+class="btn"
+onclick="window.location.href='progress.html'">
+Open Progress
+</button>
+
+</div>
+
+<!-- ADMIN -->
+
+<div class="card">
+
+<h2>Admin Panel</h2>
+
+<p>
+Manage members and gym activities.
+</p>
+
+<button
+class="btn"
+onclick="window.location.href='admin.html'">
+Open Admin
+</button>
+
+</div>
+
+</div>
+
+<div class="footer">
+© 2026 HARISH FITNESS | Premium Fitness Platform
+</div>
+
+<script>
+
+/* USER CHECK */
+
+const user =
+JSON.parse(
+localStorage.getItem("user")
+);
+
+if(!user){
+
+window.location.href =
+"login.html";
+
+}
+
+
+/* USERNAME */
+
+document.getElementById(
+"username"
+).innerText =
+user.name || "Member";
+
+
+/* USER-SPECIFIC MEMBERSHIP */
+
+const membershipPlan =
+localStorage.getItem(
+
+"selectedPlan_" + user.email
+
+);
+
+document.getElementById(
+"plan"
+).innerText =
+
+membershipPlan ||
+"No Active Plan";
+
+
+/* USER-SPECIFIC PAYMENT STATUS */
+
+const paymentStatus =
+localStorage.getItem(
+
+"paymentStatus_" + user.email
+
+);
+
+document.getElementById(
+"paymentStatus"
+).innerText =
+
+paymentStatus ||
+"Pending";
+
+
+/* USER-SPECIFIC DIET */
+
+const dietPlan =
+localStorage.getItem(
+
+"dietPlan_" + user.email
+
+);
+
+document.getElementById(
+"diet"
+).innerText =
+
+dietPlan ||
+"No Diet Selected";
+
+
+/* USER-SPECIFIC EXPIRY */
+
+const expiry =
+localStorage.getItem(
+
+"membershipExpiry_" + user.email
+
+);
+
+if(expiry){
+
+document.getElementById(
+"expiryDate"
+).innerText = expiry;
+
+const today =
+new Date();
+
+const expiryDate =
+new Date(expiry);
+
+const diffTime =
+expiryDate - today;
+
+const diffDays =
+Math.ceil(
+diffTime /
+(1000*60*60*24)
+);
+
+document.getElementById(
+"daysRemaining"
+).innerText =
+
+diffDays +
+" Days Remaining";
+
+}
+
+
+/* USER-SPECIFIC TRAINER */
+
+const trainer =
+localStorage.getItem(
+
+"selectedTrainer_" + user.email
+
+);
+
+document.getElementById(
+"trainerName"
+).innerText =
+
+trainer ||
+"No Trainer Selected";
+
+
+/* LOGOUT */
+
+function logout(){
+
+localStorage.removeItem(
+"user"
+);
+
+alert(
+"Logged Out Successfully"
+);
+
+window.location.href =
+"login.html";
+
+}
+
+</script>
+
+</body>
+
+</html>

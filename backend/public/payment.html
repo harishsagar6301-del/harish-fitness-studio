@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial, Helvetica, sans-serif;
+        }
+
+        body{
+            background:#111;
+            color:white;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            height:100vh;
+        }
+
+        .container{
+            width:400px;
+            background:#222;
+            padding:30px;
+            border-radius:10px;
+        }
+
+        h1{
+            text-align:center;
+            margin-bottom:25px;
+            color:#00b894;
+        }
+
+        .info{
+            margin-bottom:20px;
+            font-size:20px;
+        }
+
+        button{
+            width:100%;
+            padding:12px;
+            border:none;
+            border-radius:5px;
+            background:#00b894;
+            color:white;
+            font-size:16px;
+            cursor:pointer;
+        }
+
+        button:hover{
+            background:#019875;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Payment Page</h1>
+
+        <div class="info">
+
+            <strong>Plan:</strong>
+
+            <span id="planName"></span>
+
+        </div>
+
+        <div class="info">
+
+            <strong>Price:</strong>
+
+            ₹<span id="planPrice"></span>
+
+        </div>
+
+        <button onclick="makePayment()">
+            Pay Now
+        </button>
+
+    </div>
+
+
+<!-- RAZORPAY -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+
+// GET PLAN
+const plan =
+localStorage.getItem(
+    "selectedPlan"
+);
+
+const price =
+localStorage.getItem(
+    "selectedPrice"
+);
+
+// SHOW DATA
+document.getElementById("planName")
+.innerText = plan;
+
+document.getElementById("planPrice")
+.innerText = price;
+
+
+// PAYMENT FUNCTION
+async function makePayment(){
+
+    try{
+
+        // CREATE ORDER
+        const response =
+        await fetch(
+            "http://localhost:5000/api/payment/create-order",
+            {
+                method:"POST",
+
+                headers:{
+                    "Content-Type":"application/json"
+                },
+
+                body:JSON.stringify({
+
+                    amount: price
+
+                })
+
+            }
+        );
+
+        const order =
+        await response.json();
+
+        console.log(order);
+
+
+        // RAZORPAY OPTIONS
+        const options = {
+
+            key: "rzp_test_SxuhhrpBRiUznN",
+
+            amount: order.amount,
+
+            currency: order.currency,
+
+            name: "HARISH FITNESS STUDIO",
+
+            description: plan,
+
+            order_id: order.id,
+
+
+            // SUCCESS HANDLER
+            handler: async function(response){
+
+                alert(
+                    "Payment Successful"
+                );
+
+                // GET USER
+                const user =
+                JSON.parse(
+                    localStorage.getItem("user")
+                );
+
+                // SAVE MEMBERSHIP
+                await fetch(
+                    "http://localhost:5000/api/membership/save",
+                    {
+                        method:"POST",
+
+                        headers:{
+                            "Content-Type":"application/json"
+                        },
+
+                        body:JSON.stringify({
+
+                            userEmail:user.email,
+
+                            plan:plan,
+
+                            price:price,
+
+                            paymentId:
+                            response.razorpay_payment_id
+
+                        })
+
+                    }
+                );
+
+                // REDIRECT
+                window.location.href =
+                "success.html";
+
+            },
+
+            theme: {
+                color: "#00b894"
+            }
+
+        };
+
+
+        // OPEN RAZORPAY
+        const rzp =
+        new Razorpay(options);
+
+        rzp.open();
+
+    }catch(error){
+
+        console.log(error);
+
+        alert("Payment Failed");
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>

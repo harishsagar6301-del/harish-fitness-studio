@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Membership Plans</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#050505;
+color:white;
+padding:40px;
+}
+
+h1{
+text-align:center;
+margin-bottom:40px;
+color:red;
+font-size:42px;
+}
+
+.plans{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+gap:25px;
+}
+
+.card{
+background:#111;
+padding:30px;
+border-radius:20px;
+text-align:center;
+transition:0.3s;
+}
+
+.card:hover{
+transform:translateY(-8px);
+box-shadow:0 0 20px rgba(255,0,0,0.3);
+}
+
+.card h2{
+color:red;
+margin-bottom:20px;
+font-size:28px;
+}
+
+.price{
+font-size:40px;
+margin-bottom:20px;
+color:#00ff88;
+font-weight:bold;
+}
+
+.features{
+margin-bottom:25px;
+line-height:2;
+color:#ddd;
+}
+
+button{
+width:100%;
+padding:14px;
+border:none;
+border-radius:30px;
+background:red;
+color:white;
+font-size:16px;
+font-weight:bold;
+cursor:pointer;
+transition:0.3s;
+}
+
+button:hover{
+background:#cc0000;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>Choose Your Membership Plan</h1>
+
+<div class="plans">
+
+<!-- BASIC PLAN -->
+
+<div class="card">
+
+<h2>BASIC</h2>
+
+<div class="price">
+₹999
+</div>
+
+<div class="features">
+
+<p>✔ Gym Access</p>
+<p>✔ Workout Plan</p>
+<p>✔ Diet Tips</p>
+
+</div>
+
+<button id="basic-plan">
+Buy Now
+</button>
+
+</div>
+
+
+<!-- ELITE PRO -->
+
+<div class="card">
+
+<h2>ELITE PRO</h2>
+
+<div class="price">
+₹2499
+</div>
+
+<div class="features">
+
+<p>✔ Personal Trainer</p>
+<p>✔ Premium Diet</p>
+<p>✔ Full Access</p>
+
+</div>
+
+<button id="pro-plan">
+Buy Now
+</button>
+
+</div>
+
+
+<!-- ULTIMATE -->
+
+<div class="card">
+
+<h2>ULTIMATE</h2>
+
+<div class="price">
+₹4999
+</div>
+
+<div class="features">
+
+<p>✔ VIP Access</p>
+<p>✔ Dedicated Coach</p>
+<p>✔ Premium Support</p>
+
+</div>
+
+<button id="ultimate-plan">
+Buy Now
+</button>
+
+</div>
+
+</div>
+
+
+<!-- RAZORPAY -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+
+/* USER CHECK */
+
+const user =
+JSON.parse(
+localStorage.getItem("user")
+);
+
+if(!user){
+
+window.location.href =
+"login.html";
+
+}
+
+
+/* PAYMENT FUNCTION */
+
+async function startPayment(amount, plan){
+
+try{
+
+const response =
+await fetch(
+
+"http://localhost:5000/api/payment/create-order",
+
+{
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+
+amount:amount
+
+})
+
+}
+
+);
+
+const order =
+await response.json();
+
+console.log(order);
+
+
+const options = {
+
+key:"rzp_test_SxuhhrpBRiUznN",
+
+amount:order.amount,
+
+currency:"INR",
+
+name:"HARISH FITNESS STUDIO",
+
+description:plan,
+
+order_id:order.id,
+
+
+handler: async function(response){
+
+alert(
+"Payment Successful"
+);
+
+
+// MEMBERSHIP SAVE
+
+localStorage.setItem(
+
+"selectedPlan_" + user.email,
+
+plan
+
+);
+
+
+// PAYMENT STATUS
+
+localStorage.setItem(
+
+"paymentStatus_" + user.email,
+
+"Paid"
+
+);
+
+
+// MEMBERSHIP EXPIRY
+
+const expiryDate =
+new Date();
+
+expiryDate.setDate(
+expiryDate.getDate() + 30
+);
+
+localStorage.setItem(
+
+"membershipExpiry_" +
+user.email,
+
+expiryDate.toDateString()
+
+);
+
+
+// SAVE PAYMENT DATABASE
+
+await fetch(
+
+"http://localhost:5000/api/payment/save-payment",
+
+{
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+
+userEmail:user.email,
+
+plan:plan,
+
+amount:amount,
+
+paymentId:
+response.razorpay_payment_id,
+
+orderId:
+response.razorpay_order_id
+
+})
+
+}
+
+);
+
+
+// SUCCESS PAGE
+
+window.location.href =
+"success.html";
+
+},
+
+
+theme:{
+color:"#ff0000"
+}
+
+};
+
+
+const rzp =
+new Razorpay(options);
+
+rzp.open();
+
+}catch(error){
+
+console.log(error);
+
+alert(
+"Payment Failed"
+);
+
+}
+
+}
+
+
+/* BUTTON EVENTS */
+
+document
+.getElementById("basic-plan")
+.addEventListener("click",function(){
+
+startPayment(
+999,
+"BASIC"
+);
+
+});
+
+
+document
+.getElementById("pro-plan")
+.addEventListener("click",function(){
+
+startPayment(
+2499,
+"ELITE PRO"
+);
+
+});
+
+
+document
+.getElementById("ultimate-plan")
+.addEventListener("click",function(){
+
+startPayment(
+4999,
+"ULTIMATE"
+);
+
+});
+
+</script>
+
+</body>
+
+</html>

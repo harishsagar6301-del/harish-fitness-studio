@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>
+Gym Attendance
+</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#050505;
+color:white;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+}
+
+.container{
+background:#111;
+padding:40px;
+border-radius:20px;
+width:400px;
+text-align:center;
+box-shadow:
+0 0 20px rgba(255,0,0,0.3);
+}
+
+h1{
+color:red;
+margin-bottom:20px;
+font-size:32px;
+}
+
+p{
+color:#ccc;
+margin-bottom:25px;
+font-size:18px;
+}
+
+button{
+width:100%;
+padding:14px;
+border:none;
+border-radius:30px;
+background:red;
+color:white;
+font-size:16px;
+font-weight:bold;
+cursor:pointer;
+transition:0.3s;
+}
+
+button:hover{
+background:#cc0000;
+}
+
+.success{
+color:#00ff88;
+font-weight:bold;
+margin-top:20px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>
+Gym Attendance
+</h1>
+
+<p id="status">
+Click Below To Check In
+</p>
+
+<button id="checkinBtn">
+Check In
+</button>
+
+<div
+class="success"
+id="message">
+</div>
+
+</div>
+
+
+<script>
+
+/* USER CHECK */
+
+const user =
+JSON.parse(
+localStorage.getItem("user")
+);
+
+if(!user){
+
+window.location.href =
+"login.html";
+
+}
+
+
+/* BUTTON */
+
+document
+.getElementById("checkinBtn")
+.addEventListener(
+"click",
+checkIn
+);
+
+
+/* CHECK IN FUNCTION */
+
+async function checkIn(){
+
+try{
+
+const response =
+await fetch(
+
+"http://localhost:5000/api/attendance/check-in",
+
+{
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+
+userEmail:user.email
+
+})
+
+}
+
+);
+
+
+const data =
+await response.json();
+
+console.log(data);
+
+
+/* SUCCESS */
+
+if(response.ok){
+
+document.getElementById(
+"message"
+).innerText =
+
+"✅ Attendance Marked Successfully";
+
+document.getElementById(
+"status"
+).innerText =
+
+"Today's Attendance Completed";
+
+}else{
+
+document.getElementById(
+"message"
+).innerText =
+
+"❌ " + data.msg;
+
+}
+
+}catch(error){
+
+console.log(error);
+
+document.getElementById(
+"message"
+).innerText =
+
+"❌ Server Error";
+
+}
+
+}
+
+</script>
+
+</body>
+
+</html>

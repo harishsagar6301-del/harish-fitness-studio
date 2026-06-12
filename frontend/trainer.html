@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Trainer Booking | HARISH FITNESS</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#050505;
+color:white;
+}
+
+.navbar{
+background:#111;
+padding:20px 40px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.logo{
+font-size:28px;
+font-weight:bold;
+color:red;
+}
+
+.back-btn{
+background:red;
+color:white;
+border:none;
+padding:12px 25px;
+border-radius:30px;
+cursor:pointer;
+}
+
+.container{
+padding:40px;
+}
+
+h1{
+text-align:center;
+color:red;
+margin-bottom:30px;
+}
+
+.trainers{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+gap:25px;
+}
+
+.card{
+background:#111;
+padding:25px;
+border-radius:20px;
+text-align:center;
+}
+
+.card h2{
+color:red;
+margin-bottom:10px;
+}
+
+.card p{
+color:#ddd;
+line-height:1.8;
+}
+
+.btn{
+margin-top:15px;
+background:red;
+color:white;
+border:none;
+padding:12px 25px;
+border-radius:25px;
+cursor:pointer;
+}
+
+.booking{
+margin-top:40px;
+background:#111;
+padding:25px;
+border-radius:20px;
+}
+
+.booking h2{
+color:red;
+margin-bottom:15px;
+}
+
+.status{
+font-size:18px;
+color:#00ff88;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="navbar">
+
+<div class="logo">
+HARISH FITNESS
+</div>
+
+<button
+class="back-btn"
+onclick="window.location.href='dashboard.html'">
+Dashboard
+</button>
+
+</div>
+
+<div class="container">
+
+<h1>Personal Trainers</h1>
+
+<div class="trainers">
+
+<div class="card">
+
+<h2>Rahul Sharma</h2>
+
+<p>
+Strength Training<br>
+5 Years Experience
+</p>
+
+<button
+class="btn"
+onclick="bookTrainer('Rahul Sharma')">
+Book Trainer
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>Arjun Kumar</h2>
+
+<p>
+Weight Loss Expert<br>
+7 Years Experience
+</p>
+
+<button
+class="btn"
+onclick="bookTrainer('Arjun Kumar')">
+Book Trainer
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>Vikram Singh</h2>
+
+<p>
+Bodybuilding Coach<br>
+10 Years Experience
+</p>
+
+<button
+class="btn"
+onclick="bookTrainer('Vikram Singh')">
+Book Trainer
+</button>
+
+</div>
+
+</div>
+
+<div class="booking">
+
+<h2>Your Trainer</h2>
+
+<p
+class="status"
+id="trainerStatus">
+No Trainer Booked
+</p>
+
+</div>
+
+</div>
+
+<script>
+
+const bookedTrainer =
+localStorage.getItem("trainer");
+
+document.getElementById("trainerStatus")
+.innerText =
+bookedTrainer || "No Trainer Booked";
+
+function bookTrainer(name){
+
+localStorage.setItem(
+"trainer",
+name
+);
+
+alert(
+name + " booked successfully!"
+);
+
+document.getElementById("trainerStatus")
+.innerText = name;
+
+}
+
+</script>
+
+</body>
+
+</html>

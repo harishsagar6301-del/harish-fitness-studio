@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diet Plans | HARISH FITNESS</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#050505;
+color:white;
+}
+
+.navbar{
+background:#111;
+padding:20px 40px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.logo{
+font-size:28px;
+font-weight:bold;
+color:red;
+}
+
+.back-btn{
+background:red;
+color:white;
+border:none;
+padding:12px 25px;
+border-radius:30px;
+cursor:pointer;
+}
+
+.container{
+padding:40px;
+}
+
+h1{
+text-align:center;
+color:red;
+margin-bottom:30px;
+}
+
+.plans{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:25px;
+}
+
+.card{
+background:#111;
+padding:25px;
+border-radius:20px;
+text-align:center;
+}
+
+.card h2{
+color:red;
+margin-bottom:15px;
+}
+
+.btn{
+background:red;
+color:white;
+border:none;
+padding:12px 25px;
+border-radius:25px;
+cursor:pointer;
+margin-top:15px;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="navbar">
+<div class="logo">HARISH FITNESS</div>
+
+<button
+class="back-btn"
+onclick="window.location.href='dashboard.html'">
+Dashboard </button>
+
+</div>
+
+<div class="container">
+
+<h1>Select Your Diet Goal</h1>
+
+<div class="plans">
+
+<div class="card">
+<h2>Weight Loss</h2>
+<p>Low calorie balanced diet.</p>
+<button class="btn" onclick="selectDiet('Weight Loss')">
+Choose
+</button>
+</div>
+
+<div class="card">
+<h2>Muscle Gain</h2>
+<p>High protein muscle-building diet.</p>
+<button class="btn" onclick="selectDiet('Muscle Gain')">
+Choose
+</button>
+</div>
+
+<div class="card">
+<h2>Fat Loss</h2>
+<p>Lean nutrition with high protein.</p>
+<button class="btn" onclick="selectDiet('Fat Loss')">
+Choose
+</button>
+</div>
+
+<div class="card">
+<h2>Maintenance</h2>
+<p>Balanced nutrition for health.</p>
+<button class="btn" onclick="selectDiet('Maintenance')">
+Choose
+</button>
+</div>
+
+</div>
+
+</div>
+
+<script>
+function selectDiet(plan){
+
+localStorage.setItem(
+"dietPlan",
+plan
+);
+
+alert(plan + " Diet Plan Selected");
+
+window.location.href="dashboard.html";
+
+}
+</script>
+
+</body>
+</html>

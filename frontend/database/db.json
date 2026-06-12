@@ -1,0 +1,23 @@
+{
+  "users": [],
+  "memberships": [
+    {
+      "id": 1,
+      "name": "Basic",
+      "price": 999,
+      "duration": "1 Month"
+    },
+    {
+      "id": 2,
+      "name": "Premium",
+      "price": 1999,
+      "duration": "1 Month"
+    },
+    {
+      "id": 3,
+      "name": "VIP",
+      "price": 2999,
+      "duration": "1 Month"
+    }
+  ]
+}

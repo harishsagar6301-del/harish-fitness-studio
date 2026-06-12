@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Progress Tracker | HARISH FITNESS</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#050505;
+color:white;
+}
+
+.navbar{
+background:#111;
+padding:20px 40px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.logo{
+font-size:28px;
+font-weight:bold;
+color:red;
+}
+
+.back-btn{
+background:red;
+color:white;
+border:none;
+padding:12px 25px;
+border-radius:30px;
+cursor:pointer;
+}
+
+.container{
+max-width:900px;
+margin:auto;
+padding:40px 20px;
+}
+
+h1{
+text-align:center;
+color:red;
+margin-bottom:30px;
+}
+
+.card{
+background:#111;
+padding:25px;
+border-radius:20px;
+margin-bottom:25px;
+}
+
+.card h2{
+color:red;
+margin-bottom:15px;
+}
+
+input{
+width:100%;
+padding:15px;
+margin-bottom:15px;
+border:none;
+border-radius:10px;
+background:#222;
+color:white;
+}
+
+button{
+width:100%;
+padding:15px;
+border:none;
+border-radius:30px;
+background:red;
+color:white;
+font-size:16px;
+cursor:pointer;
+}
+
+.result{
+margin-top:15px;
+font-size:20px;
+color:#00ff88;
+text-align:center;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="navbar">
+
+<div class="logo">
+HARISH FITNESS
+</div>
+
+<button
+class="back-btn"
+onclick="window.location.href='dashboard.html'">
+Dashboard
+</button>
+
+</div>
+
+<div class="container">
+
+<h1>Progress Tracker & BMI Calculator</h1>
+
+<div class="card">
+
+<h2>BMI Calculator</h2>
+
+<input
+type="number"
+id="height"
+placeholder="Height (cm)">
+
+<input
+type="number"
+id="weight"
+placeholder="Weight (kg)">
+
+<button onclick="calculateBMI()">
+Calculate BMI
+</button>
+
+<div
+class="result"
+id="bmiResult">
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>Weight Progress</h2>
+
+<input
+type="number"
+id="currentWeight"
+placeholder="Enter Current Weight">
+
+<button onclick="saveWeight()">
+Save Progress
+</button>
+
+<div
+class="result"
+id="savedWeight">
+No Weight Saved
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+function calculateBMI(){
+
+const height =
+document.getElementById("height").value / 100;
+
+const weight =
+document.getElementById("weight").value;
+
+if(!height || !weight){
+
+alert("Fill all fields");
+
+return;
+
+}
+
+const bmi =
+(weight / (height * height))
+.toFixed(1);
+
+document.getElementById("bmiResult")
+.innerText =
+"Your BMI: " + bmi;
+
+}
+
+function saveWeight(){
+
+const weight =
+document.getElementById("currentWeight")
+.value;
+
+if(!weight){
+
+alert("Enter weight");
+
+return;
+
+}
+
+localStorage.setItem(
+"currentWeight",
+weight
+);
+
+document.getElementById("savedWeight")
+.innerText =
+weight + " kg";
+
+}
+
+const savedWeight =
+localStorage.getItem(
+"currentWeight"
+);
+
+if(savedWeight){
+
+document.getElementById("savedWeight")
+.innerText =
+savedWeight + " kg";
+
+}
+
+</script>
+
+</body>
+
+</html>

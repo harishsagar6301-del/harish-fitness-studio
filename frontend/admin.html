@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>
+HARISH FITNESS ADMIN
+</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#050505;
+color:white;
+padding:30px;
+}
+
+h1{
+text-align:center;
+color:red;
+margin-bottom:40px;
+font-size:42px;
+}
+
+.cards{
+display:grid;
+grid-template-columns:
+repeat(auto-fit,minmax(220px,1fr));
+gap:25px;
+margin-bottom:40px;
+}
+
+.card{
+background:#111;
+padding:30px;
+border-radius:20px;
+text-align:center;
+box-shadow:
+0 0 15px rgba(255,0,0,0.2);
+}
+
+.card h2{
+color:#aaa;
+margin-bottom:15px;
+font-size:20px;
+}
+
+.card h3{
+font-size:40px;
+color:#00ff88;
+}
+
+.table-container{
+background:#111;
+padding:20px;
+border-radius:20px;
+overflow-x:auto;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+table th,
+table td{
+padding:15px;
+text-align:center;
+border-bottom:
+1px solid #333;
+}
+
+table th{
+color:red;
+}
+
+table td{
+color:#ddd;
+}
+
+.active{
+color:#00ff88;
+font-weight:bold;
+}
+
+.expired{
+color:red;
+font-weight:bold;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>
+HARISH FITNESS ADMIN PANEL
+</h1>
+
+
+<!-- DASHBOARD CARDS -->
+
+<div class="cards">
+
+<div class="card">
+
+<h2>Total Members</h2>
+
+<h3 id="totalMembers">
+0
+</h3>
+
+</div>
+
+
+<div class="card">
+
+<h2>Total Revenue</h2>
+
+<h3 id="totalRevenue">
+₹0
+</h3>
+
+</div>
+
+
+<div class="card">
+
+<h2>Total Payments</h2>
+
+<h3 id="totalPayments">
+0
+</h3>
+
+</div>
+
+
+<div class="card">
+
+<h2>Active Members</h2>
+
+<h3 id="activeMembers">
+0
+</h3>
+
+</div>
+
+
+<div class="card">
+
+<h2>Expired Members</h2>
+
+<h3 id="expiredMembers">
+0
+</h3>
+
+</div>
+
+</div>
+
+
+
+<!-- MEMBERS TABLE -->
+
+<div class="table-container">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Email</th>
+
+<th>Plan</th>
+
+<th>Amount</th>
+
+<th>Status</th>
+
+<th>Expiry Date</th>
+
+<th>Days Left</th>
+
+</tr>
+
+</thead>
+
+<tbody id="paymentTable">
+
+</tbody>
+
+</table>
+
+</div>
+
+
+
+<script>
+
+async function loadAdminData(){
+
+try{
+
+const response =
+await fetch(
+
+"http://localhost:5000/api/payment/all-payments"
+
+);
+
+const payments =
+await response.json();
+
+console.log(payments);
+
+
+/* TOTAL MEMBERS */
+
+const uniqueMembers =
+new Set();
+
+payments.forEach(payment => {
+
+uniqueMembers.add(
+payment.userEmail
+);
+
+});
+
+document.getElementById(
+"totalMembers"
+).innerText =
+
+uniqueMembers.size;
+
+
+/* TOTAL REVENUE */
+
+let revenue = 0;
+
+payments.forEach(payment => {
+
+revenue += payment.amount;
+
+});
+
+document.getElementById(
+"totalRevenue"
+).innerText =
+
+"₹" + revenue;
+
+
+/* TOTAL PAYMENTS */
+
+document.getElementById(
+"totalPayments"
+).innerText =
+
+payments.length;
+
+
+/* ACTIVE & EXPIRED */
+
+let active = 0;
+let expired = 0;
+
+
+/* TABLE */
+
+const table =
+document.getElementById(
+"paymentTable"
+);
+
+table.innerHTML = "";
+
+
+payments.forEach(payment => {
+
+const paymentDate =
+new Date(payment.createdAt);
+
+const expiryDate =
+new Date(paymentDate);
+
+expiryDate.setDate(
+expiryDate.getDate() + 30
+);
+
+const today =
+new Date();
+
+const diffTime =
+expiryDate - today;
+
+const daysLeft =
+Math.ceil(
+diffTime /
+(1000*60*60*24)
+);
+
+let status = "";
+let statusClass = "";
+
+if(daysLeft > 0){
+
+status = "ACTIVE";
+statusClass = "active";
+active++;
+
+}else{
+
+status = "EXPIRED";
+statusClass = "expired";
+expired++;
+
+}
+
+
+table.innerHTML += `
+
+<tr>
+
+<td>
+${payment.userEmail}
+</td>
+
+<td>
+${payment.plan}
+</td>
+
+<td>
+₹${payment.amount}
+</td>
+
+<td class="${statusClass}">
+${status}
+</td>
+
+<td>
+${expiryDate.toDateString()}
+</td>
+
+<td>
+${daysLeft > 0 ? daysLeft : 0}
+Days
+</td>
+
+</tr>
+
+`;
+
+});
+
+
+document.getElementById(
+"activeMembers"
+).innerText = active;
+
+document.getElementById(
+"expiredMembers"
+).innerText = expired;
+
+
+}catch(error){
+
+console.log(error);
+
+alert(
+"Failed To Load Admin Data"
+);
+
+}
+
+}
+
+
+loadAdminData();
+
+</script>
+
+</body>
+
+</html>

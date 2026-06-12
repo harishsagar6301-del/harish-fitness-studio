@@ -1,0 +1,248 @@
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  background:#050505;
+  color:white;
+  font-family:'Poppins',sans-serif;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+/* NAVBAR */
+
+.navbar{
+  position:fixed;
+  width:100%;
+  top:0;
+  left:0;
+  padding:20px 8%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:rgba(0,0,0,0.7);
+  backdrop-filter:blur(10px);
+  z-index:1000;
+}
+
+.logo{
+  font-size:30px;
+  color:#ff0000;
+  font-family:'Oswald',sans-serif;
+  font-weight:700;
+}
+
+.nav-links{
+  display:flex;
+  gap:30px;
+  list-style:none;
+}
+
+.nav-links a{
+  text-decoration:none;
+  color:white;
+  font-weight:500;
+}
+
+.nav-buttons{
+  display:flex;
+  gap:15px;
+}
+
+.login-btn,
+.join-btn{
+  padding:10px 20px;
+  border-radius:30px;
+  text-decoration:none;
+  font-weight:600;
+}
+
+.login-btn{
+  border:1px solid #ff0000;
+  color:white;
+}
+
+.join-btn{
+  background:#ff0000;
+  color:white;
+}
+
+/* HERO */
+
+.hero{
+  height:100vh;
+  background:url("https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=1600") center/cover no-repeat;
+  position:relative;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+}
+
+.overlay{
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,0.75);
+}
+
+.hero-content{
+  position:relative;
+  z-index:2;
+}
+
+.hero-content h1{
+  font-size:90px;
+  font-family:'Oswald',sans-serif;
+  line-height:1;
+}
+
+.hero-content span{
+  color:#ff0000;
+}
+
+.hero-content p{
+  margin-top:20px;
+  font-size:22px;
+  color:#ccc;
+}
+
+.hero-btn{
+  display:inline-block;
+  margin-top:30px;
+  padding:15px 40px;
+  background:#ff0000;
+  color:white;
+  text-decoration:none;
+  border-radius:50px;
+  font-weight:700;
+}
+
+/* PLANS */
+
+.plans{
+  padding:120px 8%;
+}
+
+.plans h2{
+  text-align:center;
+  font-size:50px;
+  margin-bottom:60px;
+  font-family:'Oswald',sans-serif;
+}
+
+.plan-container{
+  display:flex;
+  gap:30px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+
+.plan-card{
+  background:#111;
+  width:320px;
+  padding:40px;
+  border-radius:20px;
+  position:relative;
+  transition:0.4s;
+}
+
+.plan-card:hover{
+  transform:translateY(-10px);
+}
+
+.plan-card h3{
+  font-size:32px;
+  color:#ff0000;
+}
+
+.plan-card h1{
+  font-size:60px;
+  margin:20px 0;
+}
+
+.plan-card ul{
+  list-style:none;
+  margin:20px 0;
+}
+
+.plan-card ul li{
+  margin-bottom:15px;
+}
+
+.plan-card button{
+  width:100%;
+  padding:15px;
+  border:none;
+  border-radius:40px;
+  background:#ff0000;
+  color:white;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.premium{
+  border:2px solid #ff0000;
+}
+
+.badge{
+  position:absolute;
+  top:-15px;
+  right:20px;
+  background:#ff0000;
+  padding:8px 15px;
+  border-radius:30px;
+  font-size:12px;
+}
+
+/* ABOUT */
+
+.about{
+  padding:120px 8%;
+  background:#0d0d0d;
+  text-align:center;
+}
+
+.about h2{
+  font-size:50px;
+  margin-bottom:30px;
+  font-family:'Oswald',sans-serif;
+}
+
+.about p{
+  max-width:900px;
+  margin:auto;
+  color:#bbb;
+  line-height:1.8;
+}
+
+/* CONTACT */
+
+.contact{
+  padding:120px 8%;
+  text-align:center;
+}
+
+.contact h2{
+  font-size:50px;
+  margin-bottom:30px;
+  font-family:'Oswald',sans-serif;
+}
+
+.contact p{
+  margin-bottom:15px;
+  color:#bbb;
+}
+
+/* FOOTER */
+
+footer{
+  padding:30px;
+  text-align:center;
+  background:#0a0a0a;
+  color:#666;
+}

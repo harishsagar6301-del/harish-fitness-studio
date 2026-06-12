@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Workout Tracker | HARISH FITNESS</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#050505;
+color:white;
+}
+
+.navbar{
+background:#111;
+padding:20px 40px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.logo{
+font-size:28px;
+font-weight:bold;
+color:red;
+}
+
+.back-btn{
+background:red;
+color:white;
+border:none;
+padding:12px 25px;
+border-radius:30px;
+cursor:pointer;
+}
+
+.container{
+max-width:900px;
+margin:40px auto;
+padding:20px;
+}
+
+h1{
+text-align:center;
+color:red;
+margin-bottom:30px;
+}
+
+.form{
+background:#111;
+padding:25px;
+border-radius:20px;
+margin-bottom:30px;
+}
+
+input{
+width:100%;
+padding:15px;
+margin-bottom:15px;
+border:none;
+border-radius:10px;
+background:#222;
+color:white;
+}
+
+.save-btn{
+width:100%;
+padding:15px;
+background:red;
+color:white;
+border:none;
+border-radius:30px;
+cursor:pointer;
+font-size:16px;
+}
+
+.workout-list{
+background:#111;
+padding:25px;
+border-radius:20px;
+}
+
+.workout-item{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px;
+background:#1a1a1a;
+border-radius:10px;
+margin-bottom:10px;
+}
+
+.delete-btn{
+background:red;
+color:white;
+border:none;
+padding:8px 15px;
+border-radius:20px;
+cursor:pointer;
+}
+
+.empty{
+text-align:center;
+color:#888;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="navbar">
+
+<div class="logo">
+HARISH FITNESS
+</div>
+
+<button
+class="back-btn"
+onclick="window.location.href='dashboard.html'">
+Dashboard </button>
+
+</div>
+
+<div class="container">
+
+<h1>Workout Tracker</h1>
+
+<div class="form">
+
+<input
+type="text"
+id="exercise"
+placeholder="Exercise Name">
+
+<input
+type="number"
+id="sets"
+placeholder="Sets">
+
+<input
+type="number"
+id="reps"
+placeholder="Reps">
+
+<button
+class="save-btn"
+onclick="saveWorkout()">
+Save Workout </button>
+
+</div>
+
+<div class="workout-list">
+
+<h2 style="color:red;margin-bottom:20px;">
+Today's Workouts
+</h2>
+
+<div id="workouts"></div>
+
+</div>
+
+</div>
+
+<script>
+
+let workouts =
+JSON.parse(
+localStorage.getItem("workouts")
+) || [];
+
+function saveWorkout(){
+
+const exercise =
+document.getElementById("exercise").value;
+
+const sets =
+document.getElementById("sets").value;
+
+const reps =
+document.getElementById("reps").value;
+
+if(!exercise || !sets || !reps){
+
+alert("Please fill all fields");
+
+return;
+
+}
+
+workouts.push({
+exercise,
+sets,
+reps
+});
+
+localStorage.setItem(
+"workouts",
+JSON.stringify(workouts)
+);
+
+document.getElementById("exercise").value="";
+document.getElementById("sets").value="";
+document.getElementById("reps").value="";
+
+renderWorkouts();
+
+}
+
+function deleteWorkout(index){
+
+workouts.splice(index,1);
+
+localStorage.setItem(
+"workouts",
+JSON.stringify(workouts)
+);
+
+renderWorkouts();
+
+}
+
+function renderWorkouts(){
+
+const container =
+document.getElementById("workouts");
+
+if(workouts.length===0){
+
+container.innerHTML=
+'<p class="empty">No workouts added yet.</p>';
+
+return;
+
+}
+
+container.innerHTML="";
+
+workouts.forEach((workout,index)=>{
+
+container.innerHTML += `
+
+<div class="workout-item">
+
+<div>
+
+<strong>${workout.exercise}</strong><br>
+
+${workout.sets} Sets × ${workout.reps} Reps
+
+</div>
+
+<button
+class="delete-btn"
+onclick="deleteWorkout(${index})">
+Delete
+</button>
+
+</div>
+
+`;
+
+});
+
+}
+
+renderWorkouts();
+
+</script>
+
+</body>
+
+</html>
